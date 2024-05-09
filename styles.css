@@ -1,0 +1,20 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.add-book {
+    height: 20%;
+}
+
+.add-book:hover, dialog button:hover {
+    cursor: pointer;
+}
+
+.card {
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
