@@ -1,20 +1,58 @@
+body {
+    padding: 3vh 3vw;
+}
+
+.heading {
+    font-size: 3vh;
+}
+
 .container {
+    margin-top: 2vh;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1vw;
 }
 
 .add-book {
-    height: 20%;
+    height: 16%;
 }
 
-.add-book:hover, dialog button:hover {
+.add:hover, dialog button:hover, .delete-icon:hover, .window-close:hover{
     cursor: pointer;
 }
 
+dialog {
+    height: 60%;
+    padding: 5vh;
+    border: none;
+    border-radius: 1.5%;
+}
+
+.window-close {
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    height: 4%;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 8%;
+}
+
+.delete-icon:hover {
+    filter: invert(31%) sepia(86%) saturate(1500%) hue-rotate(335deg) brightness(90%) contrast(109%);
+}
+
 .card {
-    height: 30vh;
+    position: relative;
+    height: 25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 1px solid black;
+    border-radius: 5%;
 }

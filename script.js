@@ -12,46 +12,73 @@ Book.prototype.info = function() {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read === true ? "read already" : "not read yet"}`;
 }
 
-// adds the newest book to the array
-function addBookToLibrary(book) {
-    myLibrary.push(book);
-}
-
 const dialog = document.querySelector("dialog");
-const addBookBtn = document.querySelector(".add-book");
-const closeBtn = document.querySelector("dialog button");
+const addBookBtn = document.querySelector(".add");
+const closeBtn = document.querySelector(".window-close");
+const confirmAddBtn = document.querySelector(".cfm-add-btn");
+const inputTitle = document.querySelector("#title");
+const inputAuthor = document.querySelector("#author");
+const inputPages = document.querySelector("#pages");
 
 // when plus sign clicked, open the dialog
 addBookBtn.addEventListener("click", ()  => {
     dialog.showModal(dialog);
 });
 
+confirmAddBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    addBookToLibrary(inputTitle.value, inputAuthor.value, inputPages.value, false);
+    inputTitle.value = "";
+    inputAuthor.value = "";
+    inputPages.value  = "";
+    dialog.close();
+});
+
+
 // when close button pressed, close the dialog
 closeBtn.addEventListener("click", () => {
     dialog.close();
-})
+});
 
-// creates the book in the array as well as create the html card
-function createBookCard() {
-    for (let i in myLibrary) {
-        const container = document.querySelector(".container");
-        const newCard = document.createElement("div");
-        const newTitle = document.createElement("div");
-        const newAuthor = document.createElement("div");
-        const newPages = document.createElement("div");
+const addBookCard = document.querySelector(".add");
+const container = document.querySelector(".container");
 
-        newTitle.innerHTML = i.title;
-        newAuthor.innerHTML = i.author;
-        newPages.innerHTML = i.pages;
-
-        newCard.classList.toggle("card");
-        newTitle.classList.toggle("card-title");
-        newAuthor.classList.toggle("card-author");
-        newPages.classList.toggle("class-pages");
-
-        newCard.appendChild(newTitle);
-        newCard.appendChild(newAuthor);
-        newCard.appendChild(newPages);
-        container.appendChild(newCard);
-    }
+// adds the newest book to the array
+function addBookToLibrary(title, author, pages) {
+    const book = new Book(title, author, pages, false);
+    createBook(book);
+    myLibrary.push(book);
 }
+
+// creates book card
+function createBook(book) {
+    const newCard = document.createElement("div");
+    const newTitle = document.createElement("div");
+    const newAuthor = document.createElement("div");
+    const newPages = document.createElement("div");
+    const deleteBtn = document.createElement("img");
+
+    newCard.dataset.index = myLibrary.length;
+    deleteBtn.src = "delete.svg";
+    newTitle.innerHTML = book.title;
+    newAuthor.innerHTML = book.author;
+    newPages.innerHTML = book.pages;
+
+    deleteBtn.classList.toggle("delete-icon");
+    newCard.classList.toggle("card");
+    newTitle.classList.toggle("card-title");
+    newAuthor.classList.toggle("card-author");
+    newPages.classList.toggle("class-pages");
+
+    // remove button code
+    deleteBtn.addEventListener("click", () => {
+        deleteBtn.parentElement.remove();
+        myLibrary.splice(newCard.dataset.index, 1, "");
+    })
+
+    newCard.appendChild(deleteBtn);
+    newCard.appendChild(newTitle);
+    newCard.appendChild(newAuthor);
+    newCard.appendChild(newPages);
+    container.insertBefore(newCard, addBookCard.nextSibling);
+};
