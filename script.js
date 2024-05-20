@@ -22,6 +22,7 @@ const inputTitle = document.querySelector("#title");
 const inputAuthor = document.querySelector("#author");
 const inputPages = document.querySelector("#pages");
 const inputRead = document.querySelector("#read");
+const form = document.querySelector("form");
 
 // when plus sign clicked, open the dialog
 addBookBtn.addEventListener("click", ()  => {
@@ -29,13 +30,19 @@ addBookBtn.addEventListener("click", ()  => {
 });
 
 confirmAddBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    addBookToLibrary(inputTitle.value, inputAuthor.value, inputPages.value, inputRead.checked);
-    inputTitle.value = "";
-    inputAuthor.value = "";
-    inputPages.value  = "";
-    inputRead.checked = false;
-    dialog.close();
+    if (!form.checkValidity()) {
+        form.reportValidity();
+    } else if (inputPages.value.match(/[a-z]/i)) {
+        inputPages.setCustomValidity("Please only enter numbers, you twat.")
+    } else {
+        e.preventDefault();
+        addBookToLibrary(inputTitle.value, inputAuthor.value, inputPages.value, inputRead.checked);
+        inputTitle.value = "";
+        inputAuthor.value = "";
+        inputPages.value  = "";
+        inputRead.checked = false;
+        dialog.close();
+    }
 });
 
 
@@ -69,16 +76,20 @@ function createBook(book) {
     newTitle.innerHTML = book.title;
     newAuthor.innerHTML = book.author;
     newPages.innerHTML = book.pages;
-    readBtn.innerHTML = book.read ? "Read" : "Not Read";
+    readBtn.innerHTML = book.read ? "Read" : "Unread";
 
     deleteBtn.classList.toggle("delete-icon");
     newCard.classList.toggle("card");
     newTitle.classList.toggle("card-title");
     newAuthor.classList.toggle("card-author");
-    newPages.classList.toggle("class-pages");
-    readBtn.classList.toggle("not-read");
-    if (readBtn) readBtn.classList.toggle("read");
-
+    newPages.classList.toggle("card-pages");
+    readBtn.classList.toggle("read-btn");
+    if (book.read) {
+        readBtn.classList.toggle("read");
+        newCard.classList.toggle("read-card");
+    } else {
+        readBtn.classList.toggle("not-read");
+    }
     // remove button code
     deleteBtn.addEventListener("click", () => {
         deleteBtn.parentElement.remove();
@@ -89,8 +100,10 @@ function createBook(book) {
     // change read status of book
     readBtn.addEventListener("click", () => {
         book.read = book.read ? false : true;
-        readBtn.innerHTML = book.read ? "Read" : "Not Read";
+        readBtn.innerHTML = book.read ? "Read" : "Unread";
         readBtn.classList.toggle("read");
+        readBtn.classList.toggle("not-read");
+        newCard.classList.toggle("read-card");
     })
 
     newCard.appendChild(deleteBtn);
